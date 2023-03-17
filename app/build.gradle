@@ -1,18 +1,25 @@
 plugins {
-  id 'java'
   id 'application'
   id 'checkstyle'
-  id 'org.springframework.boot' version '2.5.5'
+  id 'org.springframework.boot' version '2.5.6'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'com.adarshr.test-logger' version '3.0.0'
+  id 'com.adarshr.test-logger' version '2.1.1'
+  id 'com.github.ben-manes.versions' version '0.38.0'
   id 'org.liquibase.gradle' version '2.0.4'
-  id 'org.springdoc.openapi-gradle-plugin' version '1.5.0'
+
+  id 'org.springdoc.openapi-gradle-plugin' version '1.3.3'
+  id 'com.github.johnrengelman.processes' version '0.5.0'
+
+  id 'org.siouan.frontend-jdk11' version '6.0.0'
   id 'jacoco'
 }
 
 group = 'hexlet.code'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = '17'
+
+application {
+  mainClass = 'hexlet.code.App'
+}
 
 repositories {
   mavenCentral()
@@ -23,24 +30,60 @@ compileJava {
 }
 
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  implementation 'org.liquibase:liquibase-core'
 
-  compileOnly 'org.projectlombok:lombok'
-  annotationProcessor 'org.projectlombok:lombok'
+  implementation(
+          'org.springframework.boot:spring-boot-starter-data-jpa',
+          'org.springframework.boot:spring-boot-starter-web',
+          'org.springframework.boot:spring-boot-starter-actuator',
+          'org.springframework.boot:spring-boot-starter-validation',
+          'org.springframework.boot:spring-boot-starter-security',
+          'io.jsonwebtoken:jjwt:0.9.1',
+
+          'org.springdoc:springdoc-openapi-ui:1.5.12',
+          'org.liquibase:liquibase-core:4.6.1',
+          'com.querydsl:querydsl-core:5.0.0',
+          'com.querydsl:querydsl-jpa:5.0.0',
+          'com.rollbar:rollbar-spring-boot-webmvc:1.8.1'
+  )
+    implementation 'org.jetbrains:annotations:20.1.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+
+  annotationProcessor(
+          'org.projectlombok:lombok:1.18.22',
+          'com.querydsl:querydsl-apt:5.0.0:jpa',
+          'javax.annotation:javax.annotation-api:1.3.2',
+          'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+  )
 
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-  runtimeOnly 'com.h2database:h2:1.4.200'
-  runtimeOnly 'org.postgresql:postgresql:42.5.0'
+  liquibaseRuntime(
+          sourceSets.main.output,
+          'org.liquibase:liquibase-core:4.6.1',
+          'org.liquibase.ext:liquibase-hibernate5:4.5.0',
+          'org.springframework.boot:spring-boot-starter-data-jpa',
+          'org.postgresql:postgresql:42.2.24',
+          'com.h2database:h2:1.4.200'
+  )
 
-  liquibaseRuntime 'org.liquibase:liquibase-core:3.8.1'
-  liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
-  liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:3.6'
-  liquibaseRuntime sourceSets.main.output
+  runtimeOnly (
+          'com.h2database:h2:1.4.200',
+          'org.postgresql:postgresql:42.2.24'
+  )
 
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation(
+          'org.springframework.boot:spring-boot-starter-security',
+          'org.springframework.security:spring-security-test:5.5.1',
+          'org.springframework.boot:spring-boot-starter-test',
+          'com.tobedevoured.modelcitizen:spring:0.8.3',
+          'com.github.database-rider:rider-junit5:1.32.0'
+  )
+}
+
+wrapper {
+  gradleVersion = '7.4'
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 test {
@@ -49,10 +92,6 @@ test {
 
 testlogger {
   showStandardStreams = true
-}
-
-application {
-  mainClass = 'hexlet.code.App'
 }
 
 checkstyle {
@@ -87,6 +126,49 @@ liquibase {
     }
   }
 }
+/*liquibase {
+  activities {
+    main {
+      driver 'org.postgresql.Driver'
+      changeLogFile 'src/main/resources/db/changelog/changelog-master.xml'
+      url 'jdbc:postgresql://localhost:5432/utf'
+      username 'rusglagol'
+      password 'Polk_8814'
+      referenceUrl 'hibernate:spring:hexlet.code.model' +
+              '?dialect=org.hibernate.dialect.PostgreSQLDialect' +
+              '&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy'
+    }
+  }
+}*/
+
+frontend {
+  nodeVersion = '16.13.1'
+  installScript = 'install'
+  assembleScript = 'run build'
+  packageJsonDirectory = file("${projectDir}/frontend")
+}
+
+def configFrontendTasks = {
+  inputs.files(fileTree("$projectDir/frontend").exclude('build', 'node_modules'))
+  outputs.dir("$buildDir/resources/main/static")
+}
+
+assembleFrontend {
+  configure configFrontendTasks
+
+  doLast {
+    copy {
+      from "$projectDir/frontend/build"
+      into "$buildDir/resources/main/static"
+    }
+  }
+}
+
+installFrontend {
+  configure configFrontendTasks
+}
+
+processResources.dependsOn assembleFrontend
 
 task stage(dependsOn: ['clean', 'installDist'])
 installDist.mustRunAfter clean

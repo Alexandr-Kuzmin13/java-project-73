@@ -1,44 +1,48 @@
-server:
-  port: ${PORT:5000}
-
-logging:
-  level:
-    root: INFO
-
-spring:
-  datasource:
-    url: jdbc:h2:./java_project_73
-    username: sa
-    password:
-
-  liquibase:
-    change-log: classpath:db/changelog/changelog-master.xml
-
-  h2:
-    console:
-      enabled: true
-      path: /h2console/
-      settings:
-        web-allow-others: true
-
 #server:
 #  port: ${PORT:5000}
 #
 #base-url: /api
 #
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui.html
+#logging:
+#  level:
+#    root: INFO
 #
 #spring:
-#  application:
-#    name: app
+#  datasource:
+#    url: jdbc:h2:./java_project_73
+#    username: sa
+#    password:
 #
 #  liquibase:
-#    enabled: true
 #    change-log: classpath:db/changelog/changelog-master.xml
 #
-#  mvc:
-#    hiddenmethod:
-#      filter:
-#        enabled: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2console/
+#      settings:
+#        web-allow-others: true
+
+
+
+server:
+  port: ${PORT:5000}
+
+base-url: /api
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+spring:
+  application:
+    name: java_project_73
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

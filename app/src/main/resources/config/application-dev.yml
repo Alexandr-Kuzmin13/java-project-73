@@ -8,8 +8,6 @@ spring:
     username: sa
     password:
 
-    show-sql: true
-
   h2:
     console:
       enabled: true
@@ -18,6 +16,7 @@ spring:
         web-allow-others: true
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
 
