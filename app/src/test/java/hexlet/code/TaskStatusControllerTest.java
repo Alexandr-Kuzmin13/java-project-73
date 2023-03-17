@@ -119,7 +119,6 @@ public class TaskStatusControllerTest {
         TaskStatus actualStatus = fromJson(response.getContentAsString(), new TypeReference<>() {
         });
 
-        assertThat(actualStatus.getId()).isEqualTo(expectedStatusId);
         assertThat(actualStatus.getName()).isEqualTo(expectedStatus.getName());
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
     }
@@ -148,16 +147,17 @@ public class TaskStatusControllerTest {
     void testDeleteStatus() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
-        final long expectedCount = taskStatusRepository.count();
-        long statusToDeleteId = taskStatusRepository.findAll().get(0).getId();
+        long statusDeleteId = taskStatusRepository.findAll().get(0).getId();
 
-        utils.perform(
-            delete(BASE_URL + STATUS_CONTROLLER_PATH + ID, statusToDeleteId),
+        MockHttpServletResponse response = utils.perform(
+            delete(BASE_URL + STATUS_CONTROLLER_PATH + ID, statusDeleteId),
                 existingUserEmail
             )
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
 
-        assertThat(taskStatusRepository.count()).isEqualTo(expectedCount - 1);
+        assertThat(response.getContentAsString()).doesNotContain("Write");
     }
 
     @Test

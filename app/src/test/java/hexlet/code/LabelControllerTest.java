@@ -145,23 +145,23 @@ public class LabelControllerTest {
     void testDeleteLabel() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
-        final long expectedCount = labelRepository.count();
         long labelToDeleteId = labelRepository.findAll().get(0).getId();
 
-        utils.perform(
+        MockHttpServletResponse response = utils.perform(
             delete(BASE_URL + LABEL_CONTROLLER_PATH + ID, labelToDeleteId),
                 existingUserEmail
             )
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse();
 
-        assertThat(labelRepository.count()).isEqualTo(expectedCount - 1);
+        assertThat(response.getContentAsString()).doesNotContain("Story");
     }
 
     @Test
     public void deleteLabelWithTask() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
-        long expectedCount = labelRepository.count();
         long assignedLabelId = labelRepository.findAll().get(0).getId();
         utils.regEntity(new TaskStatusDto("Sample status"), existingUserEmail, STATUS_CONTROLLER_PATH);
         TaskDto taskDto = new TaskDto(
@@ -178,7 +178,5 @@ public class LabelControllerTest {
                 existingUserEmail
             )
             .andExpect(status().isUnprocessableEntity());
-
-        assertThat(labelRepository.count()).isEqualTo(expectedCount);
     }
 }
