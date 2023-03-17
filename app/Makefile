@@ -36,11 +36,3 @@ generate-migrations:
 
 db-migrate:
 	./gradlew update
-
-image-build:
-	docker build -t hexletcomponents/app:latest .
-
-image-push:
-	docker push hexletcomponents/app:latest
-
-.PHONY: build

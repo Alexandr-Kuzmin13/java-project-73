@@ -36,11 +36,3 @@ generate-migrations:
 
 db-migrate:
 	make -C app db-migrate
-
-image-build:
-	docker build -t hexletcomponents/java-project-73:latest .
-
-image-push:
-	docker push hexletcomponents/java-project-73:latest
-
-.PHONY: build
