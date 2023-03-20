@@ -2,7 +2,7 @@ base-url: "/api"
 
 spring:
   application:
-    name: java_project_73
+    name: java-project-73
 
   jpa:
     show-sql: true
