@@ -17,7 +17,7 @@ install:
 	./gradlew installDist
 
 start-dist:
-	./build/install/app/bin/app
+	./build/install/java-project-73/bin/java-project-73
 
 lint:
 	./gradlew checkstyleMain checkstyleTest
