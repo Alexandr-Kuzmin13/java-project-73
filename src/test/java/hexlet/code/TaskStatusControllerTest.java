@@ -25,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Set;
 
+import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskStatusController.STATUS_CONTROLLER_PATH;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ActiveProfiles(SpringConfigForIT.TEST_PROFILE)
+@ActiveProfiles(TEST_PROFILE)
 @ExtendWith (SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class TaskStatusControllerTest {
@@ -65,7 +66,7 @@ public class TaskStatusControllerTest {
     private LabelRepository labelRepository;
 
     @BeforeEach
-    public final void initialization() throws Exception {
+    public void initialization() throws Exception {
 
         utils.setUp();
         utils.regEntity(firstUserDto, USER_CONTROLLER_PATH)
@@ -74,14 +75,14 @@ public class TaskStatusControllerTest {
     }
 
     @Test
-    void registration() throws Exception {
+    public void registration() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH)
             .andExpect(status().isCreated());
     }
 
     @Test
-    void testGetStatuses() throws Exception {
+    public void testGetStatuses() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
         utils.regEntity(secondTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
@@ -101,7 +102,7 @@ public class TaskStatusControllerTest {
     }
 
     @Test
-    void testGetStatus() throws Exception {
+    public void testGetStatus() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
         TaskStatus expectedStatus = taskStatusRepository.findAll().get(0);
@@ -123,7 +124,7 @@ public class TaskStatusControllerTest {
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
     }
     @Test
-    void testUpDateStatus() throws Exception {
+    public void testUpDateStatus() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
         long statusToUpdateId = taskStatusRepository.findAll().get(0).getId();
@@ -144,7 +145,7 @@ public class TaskStatusControllerTest {
         assertThat(response.getContentAsString()).contains("Reader");
     }
     @Test
-    void testDeleteStatus() throws Exception {
+    public void testDeleteStatus() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
         long statusDeleteId = taskStatusRepository.findAll().get(0).getId();
@@ -161,7 +162,7 @@ public class TaskStatusControllerTest {
     }
 
     @Test
-    void deleteStatusWithTask() throws Exception {
+    public void deleteStatusWithTask() throws Exception {
 
         utils.regEntity(firstTaskStatus, existingUserEmail, STATUS_CONTROLLER_PATH);
         long assignedStatusId = taskStatusRepository.findAll().get(0).getId();

@@ -94,7 +94,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testRootPage() throws Exception {
+    public void testRootPage() throws Exception {
 
         MockHttpServletResponse response = utils.perform(
                 get("/welcome")
@@ -107,7 +107,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testLogin() throws Exception {
+    public void testLogin() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         LoginDto loginDto = new LoginDto(FIRST_USER_DTO.getEmail(), FIRST_USER_DTO.getPassword());
@@ -124,7 +124,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testGetUsers() throws Exception {
+    public void testGetUsers() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH);
@@ -147,7 +147,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testGetUser() throws Exception {
+    public void testGetUser() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         User expectedUser = userRepository.findAll().get(0);
@@ -170,7 +170,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testUpDateUser() throws Exception {
+    public void testUpDateUser() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         User expectedBeforeUser = userRepository.findAll().get(0);
@@ -203,7 +203,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void testDeleteUser() throws Exception {
+    public void testDeleteUser() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         User expectedUser = userRepository.findAll().get(0);
@@ -229,7 +229,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void deleteUserWithTask() throws Exception {
+    public void deleteUserWithTask() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         User existingUser = userRepository.findAll().get(0);
@@ -254,7 +254,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void deleteUserByUser() throws Exception {
+    public void deleteUserByUser() throws Exception {
 
         utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH);

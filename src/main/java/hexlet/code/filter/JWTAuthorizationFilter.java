@@ -33,7 +33,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(final HttpServletRequest request) {
+    public boolean shouldNotFilter(final HttpServletRequest request) {
         return publicUrls.matches(request);
     }
 
@@ -58,7 +58,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken buildAuthToken(final String username) {
+    public UsernamePasswordAuthenticationToken buildAuthToken(final String username) {
         return new UsernamePasswordAuthenticationToken(
             username,
             null,

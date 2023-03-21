@@ -24,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Set;
 
+import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskStatusController.STATUS_CONTROLLER_PATH;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ActiveProfiles(SpringConfigForIT.TEST_PROFILE)
+@ActiveProfiles(TEST_PROFILE)
 @ExtendWith (SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class LabelControllerTest {
@@ -64,7 +65,7 @@ public class LabelControllerTest {
     private TaskStatusRepository taskStatusRepository;
 
     @BeforeEach
-    public final void initialization() throws Exception {
+    public void initialization() throws Exception {
 
         utils.setUp();
         utils.regEntity(firstUserDto, USER_CONTROLLER_PATH).andExpect(status().isCreated());
@@ -80,7 +81,7 @@ public class LabelControllerTest {
     }
 
     @Test
-    void testGetLabels() throws Exception {
+    public void testGetLabels() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
         utils.regEntity(secondLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
@@ -100,7 +101,7 @@ public class LabelControllerTest {
     }
 
     @Test
-    void testGetLabel() throws Exception {
+    public void testGetLabel() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
         Label expectedLabel = labelRepository.findAll().get(0);
@@ -121,7 +122,7 @@ public class LabelControllerTest {
         assertThat(response.getContentType()).isEqualTo(MediaType.APPLICATION_JSON.toString());
     }
     @Test
-    void testUpDateLabel() throws Exception {
+    public void testUpDateLabel() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
         long labelToUpdateId = labelRepository.findAll().get(0).getId();
@@ -142,7 +143,7 @@ public class LabelControllerTest {
         assertThat(response.getContentAsString()).contains("Novel");
     }
     @Test
-    void testDeleteLabel() throws Exception {
+    public void testDeleteLabel() throws Exception {
 
         utils.regEntity(firstLabel, existingUserEmail, LABEL_CONTROLLER_PATH);
         long labelToDeleteId = labelRepository.findAll().get(0).getId();

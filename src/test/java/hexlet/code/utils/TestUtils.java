@@ -47,14 +47,14 @@ public class TestUtils {
     @Autowired
     private LabelRepository labelRepository;
 
-    public final void setUp() {
+    public void setUp() {
         taskRepository.deleteAll();
         labelRepository.deleteAll();
         taskStatusRepository.deleteAll();
         userRepository.deleteAll();
     }
 
-    public final ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser)
+    public ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser)
         throws Exception {
         final String token = jwtHelper.expiring(Map.of("username", byUser));
         request.header(AUTHORIZATION, token);
@@ -62,7 +62,7 @@ public class TestUtils {
         return perform(request);
     }
 
-    public final ResultActions perform(final MockHttpServletRequestBuilder request) throws Exception {
+    public ResultActions perform(final MockHttpServletRequestBuilder request) throws Exception {
         return mockMvc.perform(request);
     }
 
@@ -88,7 +88,7 @@ public class TestUtils {
         }
     }
 
-    public final ResultActions regEntity(Transferable dto, String byUser, String path) throws Exception {
+    public ResultActions regEntity(Transferable dto, String byUser, String path) throws Exception {
         final var request = post(BASE_URL + path)
             .content(asJson(dto))
             .contentType(APPLICATION_JSON);
@@ -96,7 +96,7 @@ public class TestUtils {
         return perform(request, byUser);
     }
 
-    public final ResultActions regEntity(Transferable dto, String path) throws Exception {
+    public ResultActions regEntity(Transferable dto, String path) throws Exception {
         final var request = post(BASE_URL + path)
             .content(asJson(dto))
             .contentType(APPLICATION_JSON);

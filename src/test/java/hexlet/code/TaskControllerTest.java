@@ -26,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Set;
 
+import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskStatusController.STATUS_CONTROLLER_PATH;
@@ -43,7 +44,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ActiveProfiles(SpringConfigForIT.TEST_PROFILE)
+@ActiveProfiles(TEST_PROFILE)
 @ExtendWith (SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class TaskControllerTest {
@@ -69,7 +70,7 @@ public class TaskControllerTest {
     private TestUtils utils;
 
     @BeforeEach
-    public final void initialization() throws Exception {
+    public void initialization() throws Exception {
         utils.setUp();
         utils.regEntity(firstUserDto, USER_CONTROLLER_PATH).andExpect(status().isCreated());
         existingUserEmail = userRepository.findAll().get(0).getEmail();
@@ -95,7 +96,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    void testGetTasks() throws Exception {
+    public void testGetTasks() throws Exception {
 
         utils.regEntity(firstTaskDto, existingUserEmail, TASK_CONTROLLER_PATH);
         TaskDto secondTaskDto = new TaskDto();
@@ -118,7 +119,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    void testGetTask() throws Exception {
+    public void testGetTask() throws Exception {
         utils.regEntity(firstTaskDto, existingUserEmail, TASK_CONTROLLER_PATH);
         Task expectedTask = taskRepository.findAll().get(0);
         long authorId = expectedTask.getAuthor().getId();
@@ -141,7 +142,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    void testUpDateTask() throws Exception {
+    public void testUpDateTask() throws Exception {
 
         utils.regEntity(firstTaskDto, existingUserEmail, TASK_CONTROLLER_PATH);
         Task taskToUpdate = taskRepository.findAll().get(0);
@@ -169,7 +170,7 @@ public class TaskControllerTest {
         assertThat(response.getContentAsString()).contains("New task");
     }
     @Test
-    void testDeleteTask() throws Exception {
+    public void testDeleteTask() throws Exception {
 
         utils.regEntity(firstTaskDto, existingUserEmail, TASK_CONTROLLER_PATH);
         Task existingTask = taskRepository.findAll().get(0);
