@@ -39,7 +39,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -130,7 +130,7 @@ public class TaskStatusControllerTest {
         long statusToUpdateId = taskStatusRepository.findAll().get(0).getId();
 
         MockHttpServletResponse response = utils.perform(
-                patch(BASE_URL + STATUS_CONTROLLER_PATH + ID, statusToUpdateId)
+                put(BASE_URL + STATUS_CONTROLLER_PATH + ID, statusToUpdateId)
                     .content(asJson(secondTaskStatus))
                     .contentType(APPLICATION_JSON),
                 existingUserEmail

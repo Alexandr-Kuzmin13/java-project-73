@@ -38,7 +38,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -128,7 +128,7 @@ public class LabelControllerTest {
         long labelToUpdateId = labelRepository.findAll().get(0).getId();
 
         MockHttpServletResponse response = utils.perform(
-                patch(BASE_URL + LABEL_CONTROLLER_PATH + ID, labelToUpdateId)
+                put(BASE_URL + LABEL_CONTROLLER_PATH + ID, labelToUpdateId)
                     .content(asJson(secondLabel))
                     .contentType(APPLICATION_JSON),
             existingUserEmail

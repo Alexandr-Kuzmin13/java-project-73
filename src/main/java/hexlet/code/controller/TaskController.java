@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,7 +78,7 @@ public class TaskController {
     }
 
     @Operation(summary = "Update task")
-    @PatchMapping (ID)
+    @PutMapping (ID)
     public Task updateTask(@PathVariable long id, @RequestBody @Valid TaskDto dto) {
         return taskService.updateTask(id, dto);
     }

@@ -12,8 +12,8 @@ jobs:
           java-version: 17
       - name: Build with Gradle
         run: make build
-      #         env:
-      #           ROLLBAR_TOKEN: ${{secrets.ROLLBAR_TOKEN}}
+        env:
+          ROLLBAR_TOKEN: ${{secrets.ROLLBAR_TOKEN}}
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:

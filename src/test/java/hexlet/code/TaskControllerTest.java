@@ -40,7 +40,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -154,7 +154,7 @@ public class TaskControllerTest {
         anotherTaskDto.setExecutorId(firstTaskDto.getExecutorId());
 
         MockHttpServletResponse response = utils.perform(
-            patch(BASE_URL + TASK_CONTROLLER_PATH + ID, taskToUpdateId)
+            put(BASE_URL + TASK_CONTROLLER_PATH + ID, taskToUpdateId)
             .content(asJson(anotherTaskDto))
             .contentType(APPLICATION_JSON),
                 authorEmail

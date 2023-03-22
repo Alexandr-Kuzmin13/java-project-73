@@ -40,7 +40,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -176,7 +176,7 @@ public class UserControllerTest {
         User expectedBeforeUser = userRepository.findAll().get(0);
 
         utils.perform(
-                patch(BASE_URL + USER_CONTROLLER_PATH + ID, expectedBeforeUser.getId())
+                put(BASE_URL + USER_CONTROLLER_PATH + ID, expectedBeforeUser.getId())
                     .contentType(APPLICATION_JSON)
                     .content(asJson(SECOND_USER_DTO)),
                 expectedBeforeUser.getEmail()

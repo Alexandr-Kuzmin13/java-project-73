@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -68,7 +69,7 @@ public class TaskStatusController {
     }
 
     @Operation(summary = "Update task status")
-    @PatchMapping (ID)
+    @PutMapping (ID)
     public TaskStatus updateStatus(@PathVariable long id, @RequestBody @Valid TaskStatusDto taskStatusDto) {
         return taskStatusService.updateStatus(id, taskStatusDto);
     }

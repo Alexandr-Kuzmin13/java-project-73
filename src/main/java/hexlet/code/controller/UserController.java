@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -78,7 +79,7 @@ public class UserController {
     }
 
     @Operation(summary = "Update user")
-    @PatchMapping (ID)
+    @PutMapping (ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public User updateUser(@RequestBody @Valid UserDto dto, @PathVariable long id) {
         return this.userService.updateUser(id, dto);
