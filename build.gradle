@@ -123,20 +123,6 @@ liquibase {
     }
   }
 }
-/*liquibase {
-  activities {
-    main {
-      driver 'org.postgresql.Driver'
-      changeLogFile 'src/main/resources/db/changelog/changelog-master.xml'
-      url 'jdbc:postgresql://localhost:5432/utf'
-      username 'rusglagol'
-      password 'Polk_8814'
-      referenceUrl 'hibernate:spring:hexlet.code.model' +
-              '?dialect=org.hibernate.dialect.PostgreSQLDialect' +
-              '&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy'
-    }
-  }
-}*/
 
 frontend {
   nodeVersion = '16.13.1'
