@@ -9,7 +9,7 @@ Demo: https://java-project-73-beto.onrender.com
 * Java 17, Gradle 7.4
 * Spring (Web, Data, Boot, Security)
 * Hibernate/JPA, Liquibase
-* MockMvc
+* MockMvc, JUnit
 ***
 ####  [Документация по API](https://java-project-73-beto.onrender.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/)
 ***
