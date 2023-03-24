@@ -3,9 +3,17 @@ package hexlet.code.service;
 import hexlet.code.dto.LabelDto;
 import hexlet.code.model.Label;
 
+import java.util.List;
+
 public interface LabelService {
 
-    Label createLabel(LabelDto dto);
+    Label findById(long id);
 
-    Label updateLabel(long id, LabelDto dto);
+    List<Label> findAll();
+
+    Label create(LabelDto dto);
+
+    Label update(long id, LabelDto dto);
+
+    void deleteById(long id);
 }

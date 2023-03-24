@@ -5,7 +5,6 @@ import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dto.LabelDto;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.dto.UserDto;
 import hexlet.code.model.Task;
 import hexlet.code.model.User;
 import hexlet.code.repository.LabelRepository;
@@ -26,6 +25,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Set;
 
+import static hexlet.code.UserControllerTest.FIRST_USER_DTO;
+import static hexlet.code.UserControllerTest.SECOND_USER_DTO;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
@@ -49,8 +50,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class TaskControllerTest {
 
-    private final UserDto firstUserDto = UserControllerTest.getFirstUserDto();
-    private final UserDto secondUserDto = UserControllerTest.getSecondUserDto();
     private static String existingUserEmail;
     private static TaskDto firstTaskDto;
 
@@ -72,7 +71,7 @@ public class TaskControllerTest {
     @BeforeEach
     public void initialization() throws Exception {
         utils.setUp();
-        utils.regEntity(firstUserDto, USER_CONTROLLER_PATH).andExpect(status().isCreated());
+        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH).andExpect(status().isCreated());
         existingUserEmail = userRepository.findAll().get(0).getEmail();
         long executorId = userRepository.findAll().get(0).getId();
 
@@ -133,8 +132,7 @@ public class TaskControllerTest {
             .andReturn()
             .getResponse();
 
-        Task task = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        Task task = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(task.getName()).isEqualTo(expectedTask.getName());
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
@@ -192,7 +190,7 @@ public class TaskControllerTest {
     public void getFilteredTask() throws Exception {
 
         utils.regEntity(firstTaskDto, existingUserEmail, TASK_CONTROLLER_PATH);
-        utils.regEntity(secondUserDto, USER_CONTROLLER_PATH);
+        utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH);
         User secondUser = userRepository.findAll().get(1);
         String secondUserEmail = secondUser.getEmail();
         utils.regEntity(new TaskStatusDto("New status"), secondUserEmail, STATUS_CONTROLLER_PATH);
@@ -228,8 +226,7 @@ public class TaskControllerTest {
                 .andReturn()
                 .getResponse();
 
-        List<Task> filteredTasks = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        List<Task> filteredTasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
         assertThat((long) filteredTasks.size()).isNotEqualTo(totalCount);
         assertThat((long) filteredTasks.size()).isEqualTo(expectedCount);
     }

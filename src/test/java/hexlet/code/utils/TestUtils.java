@@ -72,9 +72,9 @@ public class TestUtils {
         return MAPPER.writeValueAsString(object);
     }
 
-    public static <T> T fromJson(final String json, final TypeReference<T> to) {
+    public static <T> T fromJson(final String json, final TypeReference<T> typeReference) {
         try {
-            return MAPPER.readValue(json, to);
+            return MAPPER.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

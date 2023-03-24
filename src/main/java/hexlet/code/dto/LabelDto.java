@@ -12,10 +12,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class LabelDto implements Transferable {
 
-    private static final int MIN = 3;
-    private static final int MAX = 100;
-
-    @Size (min = MIN, max = MAX)
+    @Size (min = 3, max = 100)
     @NotBlank
     private String name;
 }

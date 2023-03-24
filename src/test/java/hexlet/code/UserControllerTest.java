@@ -50,24 +50,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class UserControllerTest {
 
-    private static final UserDto FIRST_USER_DTO = fromJson(
+    public static final UserDto FIRST_USER_DTO = fromJson(
         TestUtils.readFixtureJson("first_user_dto.json"),
         new TypeReference<>() {
         }
     );
-    private static final UserDto SECOND_USER_DTO = fromJson(
+    public static final UserDto SECOND_USER_DTO = fromJson(
         TestUtils.readFixtureJson("second_user_dto.json"),
         new TypeReference<>() {
         }
     );
 
-    public static UserDto getFirstUserDto() {
-        return FIRST_USER_DTO;
-    }
-
-    public static UserDto getSecondUserDto() {
-        return SECOND_USER_DTO;
-    }
+    private static User existingUser;
 
     @Autowired
     private UserRepository userRepository;
@@ -82,15 +76,18 @@ public class UserControllerTest {
     private TestUtils utils;
 
     @BeforeEach
-    public void initialization() {
+    public void initialization() throws Exception {
         utils.setUp();
+        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH)
+            .andExpect(status().isCreated());
+        existingUser = userRepository.findAll().get(0);
     }
 
     @Test
     public void registration() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH).andExpect(status().isCreated());
-        assertThat(userRepository.count()).isEqualTo(1);
+        utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH).andExpect(status().isCreated());
+        assertThat(userRepository.count()).isEqualTo(2);
     }
 
     @Test
@@ -109,11 +106,9 @@ public class UserControllerTest {
     @Test
     public void testLogin() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         LoginDto loginDto = new LoginDto(FIRST_USER_DTO.getEmail(), FIRST_USER_DTO.getPassword());
 
-        MockHttpServletResponse responsePost = utils
-            .perform(
+        utils.perform(
                 post(BASE_URL + LOGIN)
                     .contentType(APPLICATION_JSON)
                     .content(asJson(loginDto))
@@ -126,7 +121,6 @@ public class UserControllerTest {
     @Test
     public void testGetUsers() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH);
 
         MockHttpServletResponse response = utils
@@ -137,8 +131,7 @@ public class UserControllerTest {
             .andReturn()
             .getResponse();
 
-        List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
         assertThat(response.getContentAsString()).contains("london@email.com", "Jack", "London");
@@ -149,20 +142,16 @@ public class UserControllerTest {
     @Test
     public void testGetUser() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
-        User expectedUser = userRepository.findAll().get(0);
-
         MockHttpServletResponse response = utils
             .perform(
-                get(BASE_URL + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
-                expectedUser.getEmail()
+                get(BASE_URL + USER_CONTROLLER_PATH + ID, existingUser.getId()),
+                existingUser.getEmail()
             )
             .andExpect(status().isOk())
             .andReturn()
             .getResponse();
 
-        User user = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        User user = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
         assertThat(response.getContentAsString()).contains("london@email.com", "Jack", "London");
@@ -172,14 +161,11 @@ public class UserControllerTest {
     @Test
     public void testUpDateUser() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
-        User expectedBeforeUser = userRepository.findAll().get(0);
-
         utils.perform(
-                put(BASE_URL + USER_CONTROLLER_PATH + ID, expectedBeforeUser.getId())
+                put(BASE_URL + USER_CONTROLLER_PATH + ID, existingUser.getId())
                     .contentType(APPLICATION_JSON)
                     .content(asJson(SECOND_USER_DTO)),
-                expectedBeforeUser.getEmail()
+                existingUser.getEmail()
             )
             .andExpect(status().isOk())
             .andReturn()
@@ -196,8 +182,7 @@ public class UserControllerTest {
             .andReturn()
             .getResponse();
 
-        String oldEmail = expectedBeforeUser.getEmail();
-        assertThat(userRepository.findByEmail(oldEmail)).isEmpty();
+        assertThat(userRepository.findByEmail(existingUser.getEmail())).isEmpty();
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());
         assertThat(response.getContentAsString()).contains("twain@email.com", "Mark", "Twain");
     }
@@ -205,12 +190,9 @@ public class UserControllerTest {
     @Test
     public void testDeleteUser() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
-        User expectedUser = userRepository.findAll().get(0);
-
         utils.perform(
-                delete(BASE_URL + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
-                expectedUser.getEmail()
+                delete(BASE_URL + USER_CONTROLLER_PATH + ID, existingUser.getId()),
+                existingUser.getEmail()
             )
             .andExpect(status().isOk())
             .andReturn()
@@ -231,8 +213,6 @@ public class UserControllerTest {
     @Test
     public void deleteUserWithTask() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
-        User existingUser = userRepository.findAll().get(0);
         utils.regEntity(new TaskStatusDto("Status"), existingUser.getEmail(), STATUS_CONTROLLER_PATH);
         utils.regEntity(new LabelDto("Label"), existingUser.getEmail(), LABEL_CONTROLLER_PATH);
 
@@ -256,7 +236,6 @@ public class UserControllerTest {
     @Test
     public void deleteUserByUser() throws Exception {
 
-        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH);
         utils.regEntity(SECOND_USER_DTO, USER_CONTROLLER_PATH);
         User userToDelete = userRepository.findAll().get(0);
         User actualUser = userRepository.findAll().get(1);

@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -31,6 +32,8 @@ public class User {
     @GeneratedValue (strategy = IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Email
     @Column (unique = true)
     private String email;
 

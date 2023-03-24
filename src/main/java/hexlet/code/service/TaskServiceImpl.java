@@ -14,7 +14,7 @@ import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,21 +29,30 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final TaskStatusRepository taskStatusRepository;
     private final UserRepository userRepository;
-
     private final LabelRepository labelRepository;
 
     @PersistenceContext
     private final EntityManager entityManager;
 
     @Override
-    public Task createTask(TaskDto dto) {
+    public Task findById(long id) {
+        return taskRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Task> findAll() {
+        return taskRepository.findAll();
+    }
+
+    @Override
+    public Task create(TaskDto dto) {
         final Task task = new Task();
         task.setName(dto.getName());
         task.setDescription(dto.getDescription());
@@ -64,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Task updateTask(long id, TaskDto dto) {
+    public Task update(long id, TaskDto dto) {
         final Task taskToUpdate = taskRepository.findById(id).get();
         taskToUpdate.setName(dto.getName());
         taskToUpdate.setDescription(dto.getDescription());
@@ -78,7 +87,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Iterable<Task> getFilteredTasks(Map<String, String> requestParams) throws JsonProcessingException {
+    public void deleteById(long id) {
+        taskRepository.deleteById(id);
+    }
+
+    @Override
+    public Iterable<Task> getFiltered(Map<String, String> requestParams) throws JsonProcessingException {
         QTask task = QTask.task;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         JPAQueryFactory factory = new JPAQueryFactory(entityManager);

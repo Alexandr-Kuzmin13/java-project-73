@@ -5,7 +5,6 @@ import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dto.LabelDto;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.dto.UserDto;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
@@ -19,12 +18,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Set;
 
+import static hexlet.code.UserControllerTest.FIRST_USER_DTO;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
@@ -50,7 +49,7 @@ public class TaskStatusControllerTest {
 
     private final TaskStatusDto firstTaskStatus = new TaskStatusDto("Write");
     private final TaskStatusDto secondTaskStatus = new TaskStatusDto("Reader");
-    private final UserDto firstUserDto = UserControllerTest.getFirstUserDto();
+
     private static String existingUserEmail;
 
     @Autowired
@@ -69,7 +68,7 @@ public class TaskStatusControllerTest {
     public void initialization() throws Exception {
 
         utils.setUp();
-        utils.regEntity(firstUserDto, USER_CONTROLLER_PATH)
+        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH)
             .andExpect(status().isCreated());
         existingUserEmail = userRepository.findAll().get(0).getEmail();
     }
@@ -117,8 +116,7 @@ public class TaskStatusControllerTest {
             .andReturn()
             .getResponse();
 
-        TaskStatus actualStatus = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        TaskStatus actualStatus = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(actualStatus.getName()).isEqualTo(expectedStatus.getName());
         assertThat(response.getContentType()).isEqualTo(APPLICATION_JSON.toString());

@@ -13,14 +13,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class LoginDto {
 
-    private static final int MIN = 3;
-    private static final int MAX = 100;
-
     @NotBlank
     @Email
     private String email;
 
     @NotBlank
-    @Size (min = MIN, max = MAX)
+    @Size (min = 3, max = 100)
     private String password;
 }

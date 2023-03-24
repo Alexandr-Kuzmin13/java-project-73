@@ -64,5 +64,4 @@ public class ExceptionControllerAdvice {
     public String userNitFoundExceptionHandler(UsernameNotFoundException exception) {
         return exception.getMessage();
     }
-
 }

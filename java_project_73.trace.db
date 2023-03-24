@@ -10624,3 +10624,6 @@ select version() [90022-200]
 	at liquibase.Scope.child(Scope.java:162)
 	at liquibase.integration.commandline.Main.run(Main.java:220)
 	at liquibase.integration.commandline.Main.main(Main.java:163)
+2023-03-24 17:07:56 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATABASECHANGELOGLOCK" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-200]

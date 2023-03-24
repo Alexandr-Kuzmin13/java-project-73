@@ -5,7 +5,6 @@ import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dto.LabelDto;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
-import hexlet.code.dto.UserDto;
 import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
@@ -24,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Set;
 
+import static hexlet.code.UserControllerTest.FIRST_USER_DTO;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
@@ -47,7 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class LabelControllerTest {
 
-    private final UserDto firstUserDto = UserControllerTest.getFirstUserDto();
     private final LabelDto firstLabel = new LabelDto("Story");
     private final LabelDto secondLabel = new LabelDto("Novel");
     private static String existingUserEmail;
@@ -68,7 +67,7 @@ public class LabelControllerTest {
     public void initialization() throws Exception {
 
         utils.setUp();
-        utils.regEntity(firstUserDto, USER_CONTROLLER_PATH).andExpect(status().isCreated());
+        utils.regEntity(FIRST_USER_DTO, USER_CONTROLLER_PATH).andExpect(status().isCreated());
         existingUserEmail = userRepository.findAll().get(0).getEmail();
     }
 
@@ -115,8 +114,7 @@ public class LabelControllerTest {
             .andReturn()
             .getResponse();
 
-        Label actualLabel = fromJson(response.getContentAsString(), new TypeReference<>() {
-        });
+        Label actualLabel = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(actualLabel.getName()).isEqualTo(expectedLabel.getName());
         assertThat(response.getContentType()).isEqualTo(MediaType.APPLICATION_JSON.toString());

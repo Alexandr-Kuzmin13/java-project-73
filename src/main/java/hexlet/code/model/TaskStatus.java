@@ -27,16 +27,13 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 @AllArgsConstructor
 public class TaskStatus {
 
-    private static final int MIN = 3;
-    private static final int MAX = 100;
-
     @Id
     @GeneratedValue (strategy = IDENTITY)
     private Long id;
 
     @NotBlank
     @Column (unique = true)
-    @Size (min = MIN, max = MAX)
+    @Size (min = 3, max = 100)
     private String name;
 
     @CreationTimestamp

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -12,15 +13,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class TaskDto implements Transferable {
 
-    private static final int MIN = 3;
-    private static final int MAX = 100;
-
     @NotBlank
-    @Size (min = MIN, max = MAX)
+    @Size (min = 3, max = 100)
     private String name;
 
     private String description;
 
+    @NotNull
     private Long taskStatusId;
 
     private Long executorId;
